@@ -1,6 +1,8 @@
 import { Chip } from "@mui/material";
 import { dateFormatter } from "../utils/dateFormatter";
 import { ACCEPTED, DENIED, FREE, OCCUPIED, REQUESTED } from "../utils/constant";
+import PriorityHighIcon from "@mui/icons-material/PriorityHigh";
+import { t } from "i18next";
 
 const capacity = (capacity: string, numberOfDeceaseds: string) => {
   let result = null;
@@ -21,19 +23,16 @@ const capacity = (capacity: string, numberOfDeceaseds: string) => {
 };
 
 const expiredContract = (contractTo: string) => {
-  console.log(contractTo);
-  console.log(new Date(contractTo));
-  //  console.log(contractTo.toString());
-  if (contractTo === "Wrong string") {
-    return <Chip label={"No available contract"} color="success" />;
-  }
   let result = null;
   let contractDate = new Date(contractTo);
-  //  console.log(contractDate);
   let contractDatePlus = new Date(contractTo);
   contractDatePlus.setMonth(contractDatePlus.getMonth() - 3);
   let today = new Date();
-  if (today > contractDate) {
+  if (contractTo === "Invalid Date") {
+    result = (
+      <Chip icon={<PriorityHighIcon />} label={t("grave.add-contract-date")} />
+    );
+  } else if (today > contractDate) {
     result = <Chip label={dateFormatter(contractTo)} color="error" />;
   } else if (today > contractDatePlus) {
     result = <Chip label={dateFormatter(contractTo)} color="warning" />;
@@ -43,7 +42,7 @@ const expiredContract = (contractTo: string) => {
   return result;
 };
 
-const isActiveUser = (isActive: boolean, t: any) => {
+const isActiveUser = (isActive: boolean) => {
   let result = null;
   if (isActive) {
     result = <Chip label={t("yes")} color="success" />;
@@ -53,7 +52,7 @@ const isActiveUser = (isActive: boolean, t: any) => {
   return result;
 };
 
-const isActivePayer = (isActive: boolean, t: any) => {
+const isActivePayer = (isActive: boolean) => {
   let result = null;
   if (isActive) {
     result = <Chip label={t("yes")} color="success" />;
@@ -63,7 +62,7 @@ const isActivePayer = (isActive: boolean, t: any) => {
   return result;
 };
 
-const statusOfGraveRequest = (status: string, t: any) => {
+const statusOfGraveRequest = (status: string) => {
   let result = null;
   if (status === ACCEPTED) {
     result = <Chip label={t(ACCEPTED)} color="success" />;
@@ -75,7 +74,7 @@ const statusOfGraveRequest = (status: string, t: any) => {
   return result;
 };
 
-const statusOfGrave = (status: string, t: any) => {
+const statusOfGrave = (status: string) => {
   let result = null;
   if (status === FREE) {
     // Only FREE

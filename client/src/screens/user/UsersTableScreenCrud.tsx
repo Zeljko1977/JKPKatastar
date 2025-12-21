@@ -77,7 +77,7 @@ const UsersTableScreenCrud = () => {
     },
     {
       accessorKey: "email",
-      header: t("email"),
+      header: t("form.email"),
       enableEditing: true,
       muiEditTextFieldProps: {
         type: "email",
@@ -107,7 +107,7 @@ const UsersTableScreenCrud = () => {
       muiEditTextFieldProps: {
         select: true,
       },
-      Cell: ({ row }) => isActiveUser(row.original.isActive, t),
+      Cell: ({ row }) => isActiveUser(row.original.isActive),
     },
     {
       accessorKey: "isVerified",
@@ -117,7 +117,7 @@ const UsersTableScreenCrud = () => {
       muiEditTextFieldProps: {
         select: true,
       },
-      Cell: ({ row }) => isActiveUser(row.original.isVerified, t),
+      Cell: ({ row }) => isActiveUser(row.original.isVerified),
     },
     {
       accessorKey: "avatarUrl",
@@ -139,7 +139,6 @@ const UsersTableScreenCrud = () => {
   // call CREATE hook
   const {
     mutateAsync: createRow,
-    isPending: isCreatingRow,
     isError: isCreatingDataError,
     error: creatingDataError,
   } = useCreateRow(queryFunction, createPath);
@@ -250,7 +249,7 @@ const UsersTableScreenCrud = () => {
     //optionally customize modal content
     renderCreateRowDialogContent: ({ table, row, internalEditComponents }) => (
       <>
-        <DialogTitle variant="h3">{t("Create New User")}</DialogTitle>
+        <DialogTitle variant="h3">{t("user.create-new")}</DialogTitle>
         <DialogContent
           sx={{ display: "flex", flexDirection: "column", gap: "1rem" }}
         >
@@ -302,7 +301,7 @@ const UsersTableScreenCrud = () => {
           // );
         }}
       >
-        {t("Create New User")}
+        {t("user.create-new")}
       </Button>
     ),
     state: {
@@ -333,7 +332,7 @@ const validateEmail = (email: string) =>
   email
     .toLowerCase()
     .match(
-      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
     );
 
 function validateUser(user: User) {

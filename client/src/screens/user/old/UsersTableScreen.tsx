@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from "react";
+import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useTranslation } from "react-i18next";
 // MUI Table
@@ -44,7 +44,7 @@ const UsersTableScreen: React.FC = () => {
     {
       accessorKey: "isActive",
       header: t("Active"),
-      Cell: ({ row }) => isActiveUser(row.original.isActive, t),
+      Cell: ({ row }) => isActiveUser(row.original.isActive),
     },
   ];
   const usersStatus = useSelector(getAllUsersStatus);
@@ -104,6 +104,3 @@ const UsersTableScreen: React.FC = () => {
 };
 
 export default UsersTableScreen;
-function createTheme(arg0: { palette: { mode: string } }) {
-  throw new Error("Function not implemented.");
-}

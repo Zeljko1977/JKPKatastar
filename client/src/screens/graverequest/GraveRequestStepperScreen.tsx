@@ -89,7 +89,7 @@ const GraveRequestStepperScreen: React.FC = () => {
   const handleChangeCemetery = (event: SelectChangeEvent) => {
     const selectedCemeteryId = event.target.value;
     const foundSelectedCemetery = cemeteries?.find(
-      (cem) => cem._id === selectedCemeteryId
+      (cem) => cem._id === selectedCemeteryId,
     );
     setSelectedCemetery(foundSelectedCemetery);
     setCemeteryId(event.target.value);
@@ -99,10 +99,8 @@ const GraveRequestStepperScreen: React.FC = () => {
 
   const onClickGraveHandler = (grave: any) => {
     console.log(grave);
-    if (grave.status === "FREE") {
-      setSelectedGrave(grave);
-      setActiveStep(2);
-    }
+    setSelectedGrave(grave);
+    setActiveStep(2);
   };
 
   const calculateGridTemplateAreas = () => {
@@ -164,11 +162,7 @@ const GraveRequestStepperScreen: React.FC = () => {
             </StepButton>
           </Step>
           <Step>
-            <StepButton
-              color="inherit"
-              onClick={() => handleStep(3)}
-              disabled={!(activeStep === 3)}
-            >
+            <StepButton color="inherit" onClick={() => handleStep(3)}>
               <StepLabel>{"Potvrda uspešnog zahteva"}</StepLabel>
             </StepButton>
           </Step>
@@ -186,13 +180,13 @@ const GraveRequestStepperScreen: React.FC = () => {
           <Box sx={{ width: "50%", margin: "30px" }}>
             <FormControl fullWidth>
               <InputLabel id="cemetery-select-label">
-                {t("Cemetery")}
+                {t("cemetery.title")}
               </InputLabel>
               <Select
                 labelId="cemetery-select-label"
                 id="demo-simple-select"
                 value={cemeteryId}
-                label="Cemetery"
+                label={t("cemetery.title")}
                 onChange={handleChangeCemetery}
               >
                 {cemeteries?.map((cemetery) => (

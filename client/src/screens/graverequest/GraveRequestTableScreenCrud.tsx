@@ -58,7 +58,7 @@ const GraveRequestTableScreenCrud = () => {
   const columns: MRT_ColumnDef<CrudTableType>[] = [
     {
       accessorKey: "name",
-      header: t("name"),
+      header: t("form.name"),
       muiEditTextFieldProps: {
         type: "text",
         required: true,
@@ -92,7 +92,7 @@ const GraveRequestTableScreenCrud = () => {
     },
     {
       accessorKey: "email",
-      header: t("email"),
+      header: t("form.email"),
       muiEditTextFieldProps: {
         type: "text",
         required: true,
@@ -129,7 +129,7 @@ const GraveRequestTableScreenCrud = () => {
       header: t("status"),
       editVariant: "select",
       editSelectOptions: statuses,
-      Cell: ({ row }) => statusOfGraveRequest(row.original.status, t),
+      Cell: ({ row }) => statusOfGraveRequest(row.original.status),
     },
     {
       accessorFn: (row) => new Date(row.createdAt),
@@ -233,7 +233,7 @@ const GraveRequestTableScreenCrud = () => {
     //optionally customize modal content
     renderCreateRowDialogContent: ({ table, row, internalEditComponents }) => (
       <>
-        <DialogTitle variant="h3">{t("Create New Grave Type")}</DialogTitle>
+        <DialogTitle variant="h3">{t("grave-request.create-new")}</DialogTitle>
         <DialogContent
           sx={{ display: "flex", flexDirection: "column", gap: "1rem" }}
         >
@@ -280,7 +280,7 @@ const GraveRequestTableScreenCrud = () => {
           window.open(url, "_blank");
         }}
       >
-        {t("grave-request.new-grave-request")}
+        {t("grave-request.create-new")}
       </Button>
     ),
     state: {
@@ -304,17 +304,11 @@ const validateRequired = (value: string) => !!value.length;
 
 function validateGraveType(row: CrudTableType) {
   return {
-    name: !validateRequired(row.name)
-      ? t("CLIENT_ERR_THE_FIELD_IS_REQUIRED")
-      : "",
+    name: !validateRequired(row.name) ? t("client.err-field-required") : "",
     surname: !validateRequired(row.surname)
-      ? t("CLIENT_ERR_THE_FIELD_IS_REQUIRED")
+      ? t("client.err-field-required")
       : "",
-    email: !validateRequired(row.email)
-      ? t("CLIENT_ERR_THE_FIELD_IS_REQUIRED")
-      : "",
-    phone: !validateRequired(row.phone)
-      ? t("CLIENT_ERR_THE_FIELD_IS_REQUIRED")
-      : "",
+    email: !validateRequired(row.email) ? t("client.err-field-required") : "",
+    phone: !validateRequired(row.phone) ? t("client.err-field-required") : "",
   };
 }

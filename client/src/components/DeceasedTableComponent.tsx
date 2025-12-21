@@ -22,12 +22,7 @@ interface MyComponentProps {
 
 const DeceasedTableComponent: React.FC<MyComponentProps> = (props) => {
   console.log("PATH: ", props.path);
-  const [deathDateString, setDeathDateString] = useState("");
-  const [birthDateString, setBirthDateString] = useState("");
   const getPath = props.path;
-  const [validationErrors, setValidationErrors] = useState<
-    Record<string, string | undefined>
-  >({});
 
   const { t, i18n } = useTranslation();
 
@@ -61,7 +56,7 @@ const DeceasedTableComponent: React.FC<MyComponentProps> = (props) => {
       //accessorKey: "dateBirth",
       accessorFn: (row) => dateCalendarFormatter(row.dateBirth),
       id: "dateBirth",
-      header: t("dateBirth"),
+      header: t("dates.birth"),
       enableColumnFilter: false,
       filterFn: "between",
       filterVariant: "date",
@@ -71,7 +66,7 @@ const DeceasedTableComponent: React.FC<MyComponentProps> = (props) => {
     {
       accessorFn: (row) => dateCalendarFormatter(row.dateDeath),
       id: "dateDeath",
-      header: t("dateDeath"),
+      header: t("dates.death"),
       enableColumnFilter: false,
       filterFn: "between",
       filterVariant: "date",
@@ -92,7 +87,7 @@ const DeceasedTableComponent: React.FC<MyComponentProps> = (props) => {
 
   useEffect(() => {
     refetch(); // Pozivamo refetch svaki put kada se promeni path
-  }, [props.path]);
+  }, [props.path, refetch]);
 
   function errorOccuried() {
     return isLoadingDataError;

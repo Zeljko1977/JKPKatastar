@@ -4,7 +4,6 @@ import { NavDropdown } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 import { useSelector, useDispatch } from "react-redux";
 import { selectUser, logoutUser } from "../features/userSlice";
-import { Link } from "react-router-dom";
 
 import Button from "@mui/material/Button";
 import Menu from "@mui/material/Menu";
@@ -16,6 +15,7 @@ import {
   Box,
   Container,
   IconButton,
+  Link,
   ListItemIcon,
   Toolbar,
   Tooltip,
@@ -31,59 +31,42 @@ import Login from "@mui/icons-material/Login";
 import PersonAdd from "@mui/icons-material/PersonAdd";
 import { ADMINISTRATOR, OFFICER, VISITOR } from "../utils/constant.js";
 
-const pages = [
-  {
-    dropdown: false,
-    item: "header.deceased-list",
-    link: "deceased-table",
-    roles: [],
-  },
-  {
-    dropdown: false,
-    item: "header.deceased-search",
-    link: "search-deceased",
-    roles: [],
-  },
-  // { item: "Pregled GM", link: "graves-table", logged: false, role: "" },
-  {
-    dropdown: false,
-    item: "header.graves-list",
-    link: "graves-table-crud",
-    roles: [],
-  },
-  {
-    dropdown: false,
-    item: "header.grave-request",
-    link: "grave-requests-crud",
-    roles: [VISITOR, OFFICER, ADMINISTRATOR],
-  },
-  {
-    dropdown: true,
-    item: "header.cemeteries-management",
-    link: "cemeteries-table-crud",
-    roles: [OFFICER, ADMINISTRATOR],
-  },
-  {
-    dropdown: true,
-    item: "header.user-management",
-    link: "users-table-crud",
-    roles: [ADMINISTRATOR],
-  },
-  // { item: "Grave Types MGM", link: "grave-types-table" },
-  {
-    dropdown: true,
-    item: "header.grave-types-management",
-    link: "grave-types-crud",
-    roles: [OFFICER, ADMINISTRATOR],
-  },
-];
-
 const Header = () => {
+  const { t, i18n } = useTranslation();
+
+  const pages = [
+    { item: t("menu.view-deceased"), link: "deceased-table", roles: [] },
+    { item: t("menu.search-deceased"), link: "search-deceased", roles: [] },
+    // { item: "Pregled GM", link: "graves-table", logged: false, role: "" },
+    { item: t("menu.view-grave"), link: "graves-table-crud", roles: [] },
+    {
+      item: t("menu.grave-request"),
+      link: "grave-requests-crud",
+      roles: [VISITOR, OFFICER, ADMINISTRATOR],
+    },
+    {
+      item: t("menu.cemeteries"),
+      link: "cemeteries-table-crud",
+      roles: [OFFICER, ADMINISTRATOR],
+    },
+    {
+      item: t("menu.user-management"),
+      link: "users-table-crud",
+      roles: [ADMINISTRATOR],
+    },
+    // { item: "Grave Types MGM", link: "grave-types-table" },
+    {
+      item: t("menu.grave-types"),
+      link: "grave-types-crud",
+      roles: [OFFICER, ADMINISTRATOR],
+    },
+  ];
+
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
-    null
+    null,
   );
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
-    null
+    null,
   );
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
@@ -104,7 +87,6 @@ const Header = () => {
   const theme = useTheme();
   const colorMode = React.useContext(ColorModeContext);
 
-  const { t, i18n } = useTranslation();
   const [language, setLanguage] = useState("sr");
   const user = useSelector(selectUser);
 
@@ -128,7 +110,7 @@ const Header = () => {
     const selectedLanguage = languageFromStorage ? languageFromStorage : "sr";
     setLanguage(selectedLanguage);
     i18n.changeLanguage(selectedLanguage);
-  }, []);
+  }, [i18n]);
 
   const logoutHandler = () => {
     dispatch(logoutUser());
@@ -143,8 +125,8 @@ const Header = () => {
             <Typography
               variant="h6"
               noWrap
-              component={Link}
-              to="/landing"
+              component="a"
+              href="#app-bar-with-responsive-menu"
               sx={{
                 mr: 2,
                 display: { xs: "none", md: "flex" },
@@ -191,7 +173,7 @@ const Header = () => {
                   .filter(
                     (page) =>
                       page.roles?.length === 0 ||
-                      page.roles?.find((role) => user?.role === role)
+                      page.roles?.find((role) => user?.role === role),
                   )
                   .map((page) => navBarMenuItem(page))}
               </Menu>
@@ -201,8 +183,8 @@ const Header = () => {
             <Typography
               variant="h5"
               noWrap
-              component={Link}
-              to="/landing"
+              component="a"
+              href="#app-bar-with-responsive-menu"
               sx={{
                 mr: 2,
                 display: { xs: "flex", md: "none" },
@@ -220,34 +202,11 @@ const Header = () => {
               {pages
                 .filter(
                   (page) =>
-                    !page.dropdown &&
-                    (page.roles?.length === 0 ||
-                      page.roles?.find((role) => user?.role === role))
+                    page.roles?.length === 0 ||
+                    page.roles?.find((role) => user?.role === role),
                 )
                 .map((page) => navBarButton(page))}
             </Box>
-            {user?.role === ADMINISTRATOR && (
-              <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-                <NavDropdown title={t("header.management")}>
-                  {pages
-                    .filter(
-                      (page) =>
-                        page.dropdown &&
-                        (page.roles?.length === 0 ||
-                          page.roles?.find((role) => user?.role === role))
-                    )
-                    .map((page, index) => (
-                      <NavDropdown.Item
-                        key={index}
-                        to={`${page.link}`}
-                        as={Link}
-                      >
-                        {t(page.item)}
-                      </NavDropdown.Item>
-                    ))}
-                </NavDropdown>
-              </Box>
-            )}
 
             <Box sx={{ flexGrow: 0 }}>
               <Tooltip title="Open settings">
@@ -272,7 +231,7 @@ const Header = () => {
                 onClose={handleCloseUserMenu}
               >
                 {!user && (
-                  <MenuItem key={"Login"} to="/login-user" component={Link}>
+                  <MenuItem key={"Login"} href="/login-user" component={Link}>
                     <ListItemIcon>
                       <Login fontSize="small" />
                     </ListItemIcon>
@@ -280,7 +239,7 @@ const Header = () => {
                   </MenuItem>
                 )}
                 {!user && (
-                  <MenuItem key={"Register"} to="/add-user" component={Link}>
+                  <MenuItem key={"Register"} href="/add-user" component={Link}>
                     <ListItemIcon>
                       <PersonAdd fontSize="small" />
                     </ListItemIcon>
@@ -319,6 +278,9 @@ const Header = () => {
                 <NavDropdown.Item onClick={() => selectLangugeHandler("hu")}>
                   HU
                 </NavDropdown.Item>
+                <NavDropdown.Item onClick={() => selectLangugeHandler("en")}>
+                  EN
+                </NavDropdown.Item>
               </NavDropdown>
             </Box>
           </Toolbar>
@@ -331,19 +293,19 @@ const Header = () => {
     return (
       <Button
         key={page.item}
-        to={page.link}
+        href={page.link}
         component={Link}
         sx={{ my: 2, color: "white", display: "block" }}
       >
-        {t(page.item)}
+        {page.item}
       </Button>
     );
   }
 
   function navBarMenuItem(page: { item: string; link: string }) {
     return (
-      <MenuItem key={page.item} to={page.link} component={Link}>
-        <Typography textAlign="center">{t(page.item)}</Typography>
+      <MenuItem key={page.item} href={page.link} component={Link}>
+        <Typography textAlign="center">{page.item}</Typography>
       </MenuItem>
     );
   }
